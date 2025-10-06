@@ -1,6 +1,7 @@
 variable "cluster_name" {
   description = "Nome do cluster EKS"
   type        = string
+  default     = "techchallenge-eks"
 }
 
 variable "vpc_id" {
