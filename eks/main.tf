@@ -31,7 +31,28 @@ resource "aws_eks_node_group" "default" {
     min_size     = 1
   }
 
+  remote_access {
+    source_security_group_ids = [aws_security_group.eks_nodes_sg.id]
+  }
+
   tags = {
     Name = "${var.cluster_name}-node"
+  }
+}
+
+resource "aws_security_group" "eks_nodes_sg" {
+  name        = "${var.cluster_name}-nodes-sg"
+  description = "Security Group for EKS Node Group"
+  vpc_id      = var.vpc_id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.cluster_name}-nodes-sg"
   }
 }
