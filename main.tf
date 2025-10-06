@@ -13,8 +13,5 @@ module "eks" {
 }
 
 module "iam" {
-  source = "./iam"
-
-  github_org  = var.github_org
-  github_repo = var.github_repo
+  source= "./iam"
 }
