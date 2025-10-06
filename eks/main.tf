@@ -31,10 +31,6 @@ resource "aws_eks_node_group" "default" {
     min_size     = 1
   }
 
-  remote_access {
-    source_security_group_ids = [aws_security_group.eks_nodes_sg.id]
-  }
-
   tags = {
     Name = "${var.cluster_name}-node"
   }
