@@ -66,17 +66,13 @@ resource "kubernetes_config_map" "aws_auth" {
   }
 
   data = {
-    mapRoles = yamlencode([
+    mapUsers = yamlencode([
       {
         userarn  = "arn:aws:iam::165835313479:user/deploy-user"
         username = "deploy-user"
         groups   = ["system:masters"]
       }
     ])
-  }
-
-  lifecycle {
-    ignore_changes = [data]
   }
 
   depends_on = [aws_eks_cluster.this]
