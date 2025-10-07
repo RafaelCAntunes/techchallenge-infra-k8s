@@ -27,5 +27,6 @@ output "ecr_repository_url" {
 }
 
 output "eks_cluster_auth_token" {
-value = data.aws_eks_cluster_auth.cluster.token
+  value = data.aws_eks_cluster_auth.cluster.token
+  sensitive = true
 }
