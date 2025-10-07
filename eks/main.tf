@@ -24,10 +24,11 @@ resource "aws_eks_node_group" "default" {
   node_group_name = "${var.cluster_name}-ng"
   node_role_arn   = var.node_role_arn
   subnet_ids      = var.subnet_ids
+  instance_types = "t2.micro"
 
   scaling_config {
     desired_size = 1
-    max_size     = 2
+    max_size     = 1
     min_size     = 1
   }
 
