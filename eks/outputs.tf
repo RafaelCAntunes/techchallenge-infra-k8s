@@ -27,3 +27,7 @@ output "cluster_certificate_authority_data" {
 output "node_role_arn" {
   value = var.node_role_arn
 }
+
+output "eks_cluster_auth_token" {
+  value = data.aws_eks_cluster_auth.cluster.token
+}
