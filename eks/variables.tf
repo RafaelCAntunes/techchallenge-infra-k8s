@@ -23,3 +23,8 @@ variable "node_role_arn" {
   description = "Role ARN usada pelos nodes"
   type        = string
 }
+
+variable "ssh_key_name" {
+  description = "Nome da chave SSH EC2 para acesso aos nodes do EKS"
+  type        = string
+}

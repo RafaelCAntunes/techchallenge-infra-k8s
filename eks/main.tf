@@ -24,11 +24,17 @@ resource "aws_eks_node_group" "default" {
   node_group_name = "${var.cluster_name}-ng"
   node_role_arn   = var.node_role_arn
   subnet_ids      = var.subnet_ids
+  instance_types = ["t3.micro", "t2.micro"]
 
   scaling_config {
     desired_size = 1
-    max_size     = 2
+    max_size     = 1
     min_size     = 1
+  }
+
+  remote_access {
+    ec2_ssh_key               = var.ssh_key_name
+    source_security_group_ids = [aws_security_group.eks_nodes_sg.id]
   }
 
   tags = {
