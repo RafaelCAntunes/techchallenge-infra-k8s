@@ -21,3 +21,7 @@ output "subnet_ids" {
 output "security_groups" {
   value = module.eks.node_group_sg_id
 }
+
+output "ecr_repository_url" {
+  value = aws_ecr_repository.app.repository_url
+}
