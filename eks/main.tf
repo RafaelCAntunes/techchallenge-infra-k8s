@@ -59,24 +59,17 @@ resource "aws_security_group" "eks_nodes_sg" {
   }
 }
 
-resource "kubernetes_config_map" "aws_auth" {
-  metadata {
-    name      = "aws-auth"
-    namespace = "kube-system"
-  }
+#tentando adicionar usuario no configmap do cluster
 
-  data = {
-    mapUsers = yamlencode([
-      {
-        userarn  = "arn:aws:iam::165835313479:user/deploy-user"
-        username = "deploy-user"
-        groups   = ["system:masters"]
-      }
-    ])
-  }
+resource "null_resource" "update_aws_auth" {
+  provisioner "local-exec" {
+    command = <<-EOT
+      kubectl patch configmap aws-auth -n kube-system --type merge -p '{"data":{"mapUsers": "[{\"userarn\":\"arn:aws:iam::165835313479:user/deploy-user\",\"username\":\"deploy-user\",\"groups\":[\"system:masters\"]}]"}}'
+    EOT
 
-  lifecycle {
-    ignore_changes = [data]
+    environment = {
+      KUBERNETES_CONFIG = "~/.kube/config"
+    }
   }
 
   depends_on = [aws_eks_cluster.this]
