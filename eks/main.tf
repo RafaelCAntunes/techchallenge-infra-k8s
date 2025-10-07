@@ -59,18 +59,3 @@ resource "aws_security_group" "eks_nodes_sg" {
   }
 }
 
-#tentando adicionar usuario no configmap do cluster
-
-resource "null_resource" "update_aws_auth" {
-  provisioner "local-exec" {
-    command = <<-EOT
-      kubectl patch configmap aws-auth -n kube-system --type merge -p '{"data":{"mapUsers": "[{\"userarn\":\"arn:aws:iam::165835313479:user/deploy-user\",\"username\":\"deploy-user\",\"groups\":[\"system:masters\"]}]"}}'
-    EOT
-
-    environment = {
-      KUBERNETES_CONFIG = "~/.kube/config"
-    }
-  }
-
-  depends_on = [aws_eks_cluster.this]
-}
