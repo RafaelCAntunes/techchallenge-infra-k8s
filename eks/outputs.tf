@@ -30,4 +30,5 @@ output "node_role_arn" {
 
 output "eks_cluster_auth_token" {
   value = data.aws_eks_cluster_auth.cluster.token
+  sensitive = true
 }
