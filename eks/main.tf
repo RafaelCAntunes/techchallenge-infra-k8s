@@ -58,3 +58,22 @@ resource "aws_security_group" "eks_nodes_sg" {
     Name = "${var.cluster_name}-nodes-sg"
   }
 }
+
+resource "kubernetes_config_map" "aws_auth" {
+  metadata {
+    name      = "aws-auth"
+    namespace = "kube-system"
+  }
+
+  data = {
+    mapRoles = yamlencode([
+      {
+        userarn  = "arn:aws:iam::165835313479:user/deploy-user"
+        username = "deploy-user"
+        groups   = ["system:masters"]
+      }
+    ])
+  }
+
+  depends_on = [aws_eks_cluster.this]
+}
