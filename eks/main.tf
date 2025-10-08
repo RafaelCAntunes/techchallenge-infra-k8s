@@ -42,6 +42,7 @@ resource "aws_eks_node_group" "default" {
   }
 }
 
+
 resource "aws_security_group" "eks_nodes_sg" {
   name        = "${var.cluster_name}-nodes-sg"
   description = "Security Group for EKS Node Group"
@@ -59,3 +60,29 @@ resource "aws_security_group" "eks_nodes_sg" {
   }
 }
 
+resource "kubernetes_config_map" "aws_auth" {
+  depends_on = [aws_eks_node_group.default]
+
+  metadata {
+    name      = "aws-auth"
+    namespace = "kube-system"
+  }
+
+  data = {
+    mapRoles = yamlencode([
+      {
+        rolearn  = var.node_role_arn
+        username = "system:node:{{EC2PrivateDNSName}}"
+        groups   = ["system:bootstrappers", "system:nodes"]
+      }
+    ])
+
+    mapUsers = yamlencode([
+      {
+        userarn  = "arn:aws:iam::165835313479:user/deploy-user"
+        username = "deploy-user"
+        groups   = ["system:masters"]
+      }
+    ])
+  }
+}
