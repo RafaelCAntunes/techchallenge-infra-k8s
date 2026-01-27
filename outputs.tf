@@ -1,4 +1,4 @@
-output "cluster_name" {
+/*output "cluster_name" {
   value = module.eks.cluster_name
 }
 
@@ -29,4 +29,4 @@ output "ecr_repository_url" {
 output "eks_cluster_auth_token" {
   value = data.aws_eks_cluster_auth.cluster.token
   sensitive = true
-}
+}*/
