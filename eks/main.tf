@@ -1,11 +1,3 @@
-data "aws_eks_cluster" "cluster" {
-  name = aws_eks_cluster.this.name
-}
-
-data "aws_eks_cluster_auth" "cluster" {
-  name = aws_eks_cluster.this.name
-}
-
 resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
   role_arn = var.eks_role_arn
@@ -18,6 +10,19 @@ resource "aws_eks_cluster" "this" {
     Name = var.cluster_name
   }
 }
+
+data "aws_eks_cluster" "cluster" {
+  name = aws_eks_cluster.this.name
+
+  depends_on = [aws_eks_cluster.this]
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = aws_eks_cluster.this.name
+
+  depends_on = [aws_eks_cluster.this]
+}
+
 
 resource "aws_eks_node_group" "default" {
   cluster_name    = aws_eks_cluster.this.name
@@ -40,6 +45,7 @@ resource "aws_eks_node_group" "default" {
   tags = {
     Name = "${var.cluster_name}-node"
   }
+  depends_on = [aws_eks_cluster.this]
 }
 
 
